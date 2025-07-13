@@ -1,0 +1,10 @@
+.full-width-table{
+    width: 100%;
+    margin-top: 20px;
+}
+.table-wrapper{
+    /* max-height: 400px; */
+     overflow-x: auto; 
+     width: 100%; 
+     max-width: 90rem; 
+}

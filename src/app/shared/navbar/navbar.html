@@ -1,0 +1,15 @@
+<nav class="navbar">
+<div class="logo">📊AMC Portal</div>
+<ul class="nav-links">
+<ng-container *ngIf="userRole === 'User'">
+<div>
+<span class="user-info">Logged in as: <strong>{{ userName}}</strong></span>
+</div>
+</ng-container>
+<ng-container *ngIf="userRole === 'Admin'">
+<li><a routerLink="/admin/search">User Search</a></li>
+<li><a routerLink="/admin/portfolio">View Portfolio</a></li>
+</ng-container>
+<li><a (click)="logout()">Logout</a></li>
+</ul>
+</nav>

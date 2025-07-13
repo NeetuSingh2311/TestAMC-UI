@@ -1,0 +1,43 @@
+<div class="signup-container">
+  <div class="signup-form">
+    <button mat-icon-button class="close-btn" type="button" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <h1>Sign up</h1>
+    <p>Sign up to continue</p>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Full Name</mat-label>
+        <input matInput placeholder="Full Name" formControlName="fullName">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Address" formControlName="address">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Contact Number</mat-label>
+        <input matInput placeholder="Contact Number" formControlName="contactNumber">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>PAN</mat-label>
+        <input matInput placeholder="PAN" formControlName="pan">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Password" type="password" formControlName="password">
+      </mat-form-field>
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit">Sign Up</button>
+        <button mat-stroked-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+      </div>
+      <p class="signin-link">
+        Already have an account?
+        <a href="#" (click)="onLogin($event)">Login</a>
+      </p>
+    </form>
+  </div>
+</div>

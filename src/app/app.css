@@ -1,0 +1,8 @@
+.mat-toolbar{
+    font-size: 18px;
+    justify-content: center;
+    color: white;
+    background-color: #0078d4;
+    align-items: left
+;
+}

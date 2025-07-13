@@ -1,0 +1,20 @@
+.holding-table {
+  width: 100%;
+  margin: 1rem;
+  padding: 5px;
+}
+ .header-toolbar {
+ display: flex;
+ justify-content: space-between;
+ padding: 0 1rem;
+}
+.spacer {
+ flex: 1 1 auto;
+}
+.user-info {
+ margin-right: 1rem;
+ font-size: 14px;
+}
+.table-name{
+  margin-left: 1rem;
+}

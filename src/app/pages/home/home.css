@@ -1,0 +1,179 @@
+/* Ensure no scrolling on the page */
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+}
+ 
+.home-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: calc(100vh - 64px);
+    margin-top: 64px;
+    position: relative;
+    overflow: hidden;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+ 
+/* Left side with background image (60%) */
+.home-container::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60%;
+    height: 80%;
+    background: url('/2306.i402.023.F.m004.c9.Credit score flat background.jpg') center/contain no-repeat;
+    background-size: contain;
+    z-index: 1;
+}
+ 
+/* Right side content area (40%) */
+.content-area {
+    width: 40%;
+    margin-left: 60%;
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: calc(100vh - 64px);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    position: relative;
+    z-index: 2;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.logo{
+    width: 120px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+    width: 100%;
+}
+ 
+.action-buttons button {
+    width: 100%;
+    height: 44px;
+    font-weight: 500;
+    border-radius: 6px;
+    text-transform: none;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+ 
+.action-buttons button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 120, 212, 0.15);
+}
+ 
+/* Remove the old content styling since we're using a different layout */
+ 
+.content-area h1 {
+    color: #0078d4;
+    font-size: 24px;
+    margin-bottom: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    transition: color 0.3s ease;
+    text-align: center;
+    width: 100%;
+    letter-spacing: -0.5px;
+}
+ 
+.content-area h1:hover {
+    color: #106ebe;
+}
+ 
+.content-area p {
+    font-size: 14px;
+    margin-bottom: 25px;
+    color: #5a6c7d;
+    line-height: 1.6;
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+ 
+.content-text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+    border-radius: 16px;
+    padding: 35px 25px;
+    box-shadow: 0 6px 24px rgba(0, 120, 212, 0.1);
+    border: 1px solid rgba(0, 120, 212, 0.15);
+    margin: 10px 0;
+    max-width: 400px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+ 
+.content-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0078d4 0%, #106ebe 50%, #2b88d8 100%);
+}
+ 
+/* Card hover effect */
+.content-text:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 120, 212, 0.12);
+    transition: all 0.3s ease;
+}
+ 
+/* Add some subtle styling to the accent buttons */
+.action-buttons button[color="accent"] {
+    background-color: white !important;
+    color: #0078d4 !important;
+    border: 1px solid #0078d4 !important;
+}
+ 
+.action-buttons button[color="accent"]:hover {
+    background-color: #0078d4 !important;
+    color: white !important;
+}
+ 
+.action-buttons button[color="accent"]:first-child {
+    background-color: #0078d4 !important;
+    color: white !important;
+    border: none !important;
+}
+ 
+.action-buttons button[color="accent"]:first-child:hover {
+    background-color: #106ebe !important;
+    color: white !important;
+}
+ 
+/* End of home page styles */
+ 

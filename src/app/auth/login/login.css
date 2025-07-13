@@ -1,0 +1,29 @@
+.login-container{
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    background:#fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.full-width{
+    width: 100%;
+}
+.role-select{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+.mat-toolbar{
+    font-size: 18px;
+    justify-content: center;
+    color: white;
+    background-color:#0e2f44;
+    align-items: left
+;
+}
+.button-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: flex-start;
+}

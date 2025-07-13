@@ -1,0 +1,32 @@
+<app-navbar>[userRole]="'User'"</app-navbar>
+
+<mat-toolbar color="primary" class="header-toolbar">
+</mat-toolbar>
+<div class="dashboard-container">
+
+<p class="welcome-message">Welcome, {{ userName }}!</p>
+<p class="market-value">Total Market Value{{ portfolio?.totalMarketValue | currency }}</p>
+
+
+<mat-card class="summary-card equity-card" (click)="onCardClick('Equity')">
+<mat-icon color="accent">trending_up</mat-icon>
+<div>
+<h3>Equity</h3>
+<p>Market Value: {{equityTotal|currency}}</p>
+</div>
+</mat-card>
+<mat-card class="summary-card fixed-card" (click)="onCardClick('Fixed Income')">
+<mat-icon color="primary">account_balance_wallet</mat-icon>
+<div>
+<h3>Fixed Income</h3>
+<p>Market Value: {{fixedTotal | currency}}</p>
+</div>
+</mat-card>
+</div>
+<div class="chart-box">
+  <canvas baseChart
+    [data]="chartData"
+    [type]="chartType">
+  </canvas>
+</div>
+
