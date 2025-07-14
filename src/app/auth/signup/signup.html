@@ -3,40 +3,53 @@
     <button mat-icon-button class="close-btn" type="button" (click)="onCancel()">
       <mat-icon>close</mat-icon>
     </button>
-    <h1>Sign up</h1>
-    <p>Sign up to continue</p>
+    
+    <div class="form-header">
+      <h1>Create Account</h1>
+      <p>Join us to transform your financial future</p>
+    </div>
+    
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline">
-        <mat-label>Full Name</mat-label>
-        <input matInput placeholder="Full Name" formControlName="fullName">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Address</mat-label>
-        <input matInput placeholder="Address" formControlName="address">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" formControlName="email">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Contact Number</mat-label>
-        <input matInput placeholder="Contact Number" formControlName="contactNumber">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>PAN</mat-label>
-        <input matInput placeholder="PAN" formControlName="pan">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput placeholder="Password" type="password" formControlName="password">
-      </mat-form-field>
-      <div class="button-row">
-        <button mat-raised-button color="primary" type="submit">Sign Up</button>
-        <button mat-stroked-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Full Name</mat-label>
+          <input matInput placeholder="Enter your full name" formControlName="fullName" required>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Email Address</mat-label>
+          <input matInput placeholder="Enter your email" type="email" formControlName="email" required>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Contact Number</mat-label>
+          <input matInput placeholder="Enter your contact number" formControlName="contactNumber" required>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Address</mat-label>
+          <input matInput placeholder="Enter your address" formControlName="address" required>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>PAN Number</mat-label>
+          <input matInput placeholder="Enter your PAN" formControlName="pan" required>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="Create a password" type="password" formControlName="password" required>
+        </mat-form-field>
       </div>
+      
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit">Create Account</button>
+        <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
+      </div>
+      
       <p class="signin-link">
         Already have an account?
-        <a href="#" (click)="onLogin($event)">Login</a>
+        <a href="#" (click)="onLogin($event)">Sign in here</a>
       </p>
     </form>
   </div>

@@ -1,32 +1,263 @@
-<app-navbar>[userRole]="'User'"</app-navbar>
-
-<mat-toolbar color="primary" class="header-toolbar">
-</mat-toolbar>
+<app-navbar></app-navbar>
 <div class="dashboard-container">
+  <div class="hero-section">
+    <div class="hero-content">
+      <div class="hero-header">
+        <div class="hero-text">
+          <h1 class="hero-title" *ngIf="userRole === 'USER'"><strong> Welcome back, {{ userName }} !</strong></h1>
+          <h1 class="hero-title" *ngIf="userRole === 'ADMIN'"><strong> Here is {{ userName }} 's portfolio</strong></h1>
+          <p class="hero-subtitle">Your portfolio performance at a glance</p>
+        </div>
+        <div class="portfolio-value-compact">
+          <div class="value-compact">
+            <span class="value-label-compact">Total Portfolio Value</span>
+            <span class="value-amount-compact">{{ portfolio?.totalMarketValue | currency }}</span>
+          </div>
+          <div class="value-icon-compact">
+            <mat-icon>account_balance_wallet</mat-icon>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-summary">
+        <span class="summary-item">
+          <mat-icon>pie_chart</mat-icon>
+          {{ (portfolio?.categories?.length || 0) }} Categories
+        </span>
+        <span class="summary-item">
+          <mat-icon>trending_up</mat-icon>
+          {{ getTotalHoldings() }} Total Holdings
+        </span>
+        <span class="summary-item">
+          <mat-icon>account_balance</mat-icon>
+          Active Portfolio
+        </span>
+      </div>
+    </div>
+  </div>
 
-<p class="welcome-message">Welcome, {{ userName }}!</p>
-<p class="market-value">Total Market Value{{ portfolio?.totalMarketValue | currency }}</p>
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+    <!-- Asset Summary Cards -->
+    <div class="asset-cards">
+      <mat-card class="asset-card equity-card" (click)="onCardClick('Equity')">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar equity-bg">
+            <mat-icon>trending_up</mat-icon>
+          </div>
+          <mat-card-title>Equity Holdings</mat-card-title>
+          <mat-card-subtitle>Stock Investments</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-metrics">
+            <div class="primary-metric">
+              <span class="metric-value">{{ equityTotal | currency }}</span>
+              <span class="metric-label">Market Value</span>
+            </div>
+            <div class="secondary-metrics">
+              <div class="metric-item">
+                <mat-icon>account_balance</mat-icon>
+                <span>{{ equityHoldings.length }} Holdings</span>
+              </div>
+              <div class="metric-item">
+                <mat-icon>percent</mat-icon>
+                <span>{{ getEquityPercentage() | number:'1.0-1' }}% of Portfolio</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <div class="card-action">
+            <span>View Details</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-actions>
+      </mat-card>
 
+      <mat-card class="asset-card fixed-card" (click)="onCardClick('Fixed Income')">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar fixed-bg">
+            <mat-icon>security</mat-icon>
+          </div>
+          <mat-card-title>Fixed Income</mat-card-title>
+          <mat-card-subtitle>Bond Investments</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-metrics">
+            <div class="primary-metric">
+              <span class="metric-value">{{ fixedTotal | currency }}</span>
+              <span class="metric-label">Market Value</span>
+            </div>
+            <div class="secondary-metrics">
+              <div class="metric-item">
+                <mat-icon>account_balance</mat-icon>
+                <span>{{ fixedIncomeHoldings.length }} Holdings</span>
+              </div>
+              <div class="metric-item">
+                <mat-icon>percent</mat-icon>
+                <span>{{ getFixedIncomePercentage() | number:'1.0-1' }}% of Portfolio</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <div class="card-action">
+            <span>View Details</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
 
-<mat-card class="summary-card equity-card" (click)="onCardClick('Equity')">
-<mat-icon color="accent">trending_up</mat-icon>
-<div>
-<h3>Equity</h3>
-<p>Market Value: {{equityTotal|currency}}</p>
-</div>
-</mat-card>
-<mat-card class="summary-card fixed-card" (click)="onCardClick('Fixed Income')">
-<mat-icon color="primary">account_balance_wallet</mat-icon>
-<div>
-<h3>Fixed Income</h3>
-<p>Market Value: {{fixedTotal | currency}}</p>
-</div>
-</mat-card>
-</div>
-<div class="chart-box">
-  <canvas baseChart
-    [data]="chartData"
-    [type]="chartType">
-  </canvas>
-</div>
+    <!-- Portfolio Analysis Section -->
+    <div class="analysis-section">
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>donut_large</mat-icon>
+            Asset Allocation
+          </mat-card-title>
+          <mat-card-subtitle>Portfolio Distribution</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <div class="chart-wrapper">
+              <canvas baseChart
+                [data]="chartData"
+                [type]="chartType"
+                [options]="chartOptions"
+                [legend]="true">
+              </canvas>
+            </div>
+            <div class="allocation-summary">
+              <div class="allocation-item">
+                <div class="allocation-color equity-color"></div>
+                <span class="allocation-label">Equity</span>
+                <span class="allocation-value">{{ getEquityPercentage() | number:'1.0-1' }}%</span>
+              </div>
+              <div class="allocation-item">
+                <div class="allocation-color fixed-color"></div>
+                <span class="allocation-label">Fixed Income</span>
+                <span class="allocation-value">{{ getFixedIncomePercentage() | number:'1.0-1' }}%</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
+    <!-- Holdings Overview -->
+    <div class="holdings-section">
+      <mat-card class="holdings-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>list</mat-icon>
+            Top Equity Holdings
+          </mat-card-title>
+          <mat-card-subtitle>Highest value positions</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="holdings-list" *ngIf="equityHoldings.length > 0; else noEquityHoldings">
+            <div class="holding-item" *ngFor="let holding of getTopEquityHoldings()">
+              <div class="holding-info">
+                <h4 class="holding-name">{{ holding.instrumentName }}</h4>
+                <p class="holding-ticker">{{ holding.ticker }}</p>
+              </div>
+              <div class="holding-value">
+                <span class="value">{{ holding.marketValue | currency }}</span>
+                <span class="quantity">Qty: {{ holding.quantity }}</span>
+              </div>
+            </div>
+          </div>
+          <ng-template #noEquityHoldings>
+            <div class="no-data">
+              <mat-icon>info</mat-icon>
+              <p>No equity holdings available</p>
+            </div>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="holdings-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>security</mat-icon>
+            Top Fixed Income
+          </mat-card-title>
+          <mat-card-subtitle>Bond investments</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="holdings-list" *ngIf="fixedIncomeHoldings.length > 0; else noFixedHoldings">
+            <div class="holding-item" *ngFor="let holding of getTopFixedIncomeHoldings()">
+              <div class="holding-info">
+                <h4 class="holding-name">{{ holding.instrumentName }}</h4>
+                <p class="holding-ticker">{{ holding.ticker }}</p>
+              </div>
+              <div class="holding-value">
+                <span class="value">{{ holding.marketValue | currency }}</span>
+                <span class="quantity">Qty: {{ holding.quantity }}</span>
+              </div>
+            </div>
+          </div>
+          <ng-template #noFixedHoldings>
+            <div class="no-data">
+              <mat-icon>info</mat-icon>
+              <p>No fixed income holdings available</p>
+            </div>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-section">
+      <mat-card class="stats-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>assessment</mat-icon>
+            Portfolio Statistics
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <mat-icon>account_balance</mat-icon>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value">{{ getTotalHoldings() }}</span>
+                <span class="stat-label">Total Holdings</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <mat-icon>trending_up</mat-icon>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value">{{ equityHoldings.length }}</span>
+                <span class="stat-label">Equity Positions</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <mat-icon>security</mat-icon>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value">{{ fixedIncomeHoldings.length }}</span>
+                <span class="stat-label">Fixed Income</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <mat-icon>category</mat-icon>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value">{{ portfolio?.categories?.length || 0 }}</span>
+                <span class="stat-label">Categories</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

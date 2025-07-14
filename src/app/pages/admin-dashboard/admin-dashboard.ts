@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AdminService } from '../../services/admin-service';
 import {MatTableDataSource} from '@angular/material/table';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
-export class AdminDashboard implements OnInit{
+export class AdminDashboard implements OnInit, AfterViewInit{ 
   user:any[] = [];
   filteredUser:any[] =[];
   searchControl = new FormControl('');
@@ -28,12 +28,13 @@ export class AdminDashboard implements OnInit{
    this.fetchUsers();
    this.searchControl.valueChanges.subscribe((query)=>this.filteredUsers(query|| ''));
   }
-
+  ngAfterViewInit(){
+    this.dataSource.paginator= this.paginator;
+    }
   fetchUsers():void{
     this.adminService.getAllUsers().subscribe((data: any[])=>{
       this.user = data;
       this.dataSource.data = [...data];
-      console.log(this.dataSource.data);
     });
   }
   filteredUsers(query:string):void{
@@ -51,14 +52,11 @@ export class AdminDashboard implements OnInit{
   });
 }
 viewUserPortfolio(user:any):void{
-  console.log('Viewing user Portfolio: ', user.email)
+  console.log('Viewing user Portfolio emai: ', user.email)
   sessionStorage.setItem('rowEmail',user.email);
-  this.router.navigate(['/retail-dashboard'],{ state: { userName: user.fullName } });
+  sessionStorage.setItem('rowUserName',user.fullName);
+  this.router.navigate(['/retail-dashboard']);
 }
-
- ngAfterViewInit(){
-  this.dataSource.paginator= this.paginator;
-  }
 }
 
 

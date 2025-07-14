@@ -1,37 +1,139 @@
 <app-navbar></app-navbar>
-<mat-card *ngIf="holdings && holdings.length > 0">
-  <h3 class ="table-name">Holdings in {{ category }}</h3>
-  <table mat-table [dataSource]="holdings" class="holding-table">
+<div class="page-header">
+  <div class="header-content">
+    <div class="header-text">
+      <h1 class="page-title">{{ category }} Holdings</h1>
+      <p class="page-subtitle">Detailed view of your {{ category.toLowerCase() }} investments</p>
+    </div>
+    <div class="header-stats" *ngIf="holdings && holdings.length > 0">
+      <div class="stat-item">
+        <mat-icon>assessment</mat-icon>
+        <div class="stat-info">
+          <span class="stat-label">Total Holdings</span>
+          <span class="stat-value">{{ holdings.length }}</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>trending_up</mat-icon>
+        <div class="stat-info">
+          <span class="stat-label">Total Value</span>
+          <span class="stat-value">{{ getTotalValue() | currency }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <ng-container matColumnDef="instrumentName">
-      <th mat-header-cell *matHeaderCellDef> Stock Name </th>
-      <td mat-cell *matCellDef="let holding"> {{ holding.instrumentName }} </td>
-    </ng-container>
+<div class="table-container" *ngIf="holdings && holdings.length > 0">
+  <mat-card class="holdings-card">
+    <mat-card-header class="card-header">
+      <mat-card-title class="card-title">
+        <mat-icon class="title-icon">table_chart</mat-icon>
+        Holdings Details
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content class="card-content">
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="holdings" class="holdings-table">
 
-    <ng-container matColumnDef="ticker">
-      <th mat-header-cell *matHeaderCellDef> Ticker </th>
-      <td mat-cell *matCellDef="let holding"> {{ holding.ticker }} </td>
-    </ng-container>
+          <ng-container matColumnDef="instrumentName">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">business</mat-icon>
+                <span>Instrument Name</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let holding" class="data-cell">
+              <div class="cell-content primary-text">
+                {{ holding.instrumentName }}
+              </div>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef> Description </th>
-      <td mat-cell *matCellDef="let holding"> {{ holding.description }} </td>
-    </ng-container>
+          <ng-container matColumnDef="ticker">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">code</mat-icon>
+                <span>Ticker</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let holding" class="data-cell">
+              <div class="cell-content ticker-badge">
+                {{ holding.ticker }}
+              </div>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="quantity">
-      <th mat-header-cell *matHeaderCellDef> Quantity </th>
-      <td mat-cell *matCellDef="let holding"> {{ holding.quantity }} </td>
-    </ng-container>
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">description</mat-icon>
+                <span>Description</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let holding" class="data-cell">
+              <div class="cell-content description-text">
+                {{ holding.description }}
+              </div>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="marketValue">
-      <th mat-header-cell *matHeaderCellDef> Market Value </th>
-      <td mat-cell *matCellDef="let holding"> {{ holding.marketValue | currency }} </td>
-    </ng-container>
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">inventory</mat-icon>
+                <span>Quantity</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let holding" class="data-cell">
+              <div class="cell-content quantity-text">
+                {{ holding.quantity | number:'1.0-2' }}
+              </div>
+            </td>
+          </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</mat-card>
-<mat-card *ngIf="holdings && holdings.length === 0">
-  <p>No holdings found for {{ category }}.</p>
-</mat-card>
+          <ng-container matColumnDef="marketValue">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">
+              <div class="header-content">
+                <mat-icon class="header-icon">attach_money</mat-icon>
+                <span>Market Value</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let holding" class="data-cell">
+              <div class="cell-content value-text">
+                {{ holding.marketValue | currency }}
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="empty-state" *ngIf="holdings && holdings.length === 0">
+  <mat-card class="empty-card">
+    <mat-card-content>
+      <div class="empty-content">
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <h3 class="empty-title">No {{ category }} Holdings Found</h3>
+        <p class="empty-message">You don't have any {{ category.toLowerCase() }} investments in your portfolio yet.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="loading-state" *ngIf="loading">
+  <mat-card class="loading-card">
+    <mat-card-content>
+      <div class="loading-content">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p class="loading-text">Loading your {{ category.toLowerCase() }} holdings...</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

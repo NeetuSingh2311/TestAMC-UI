@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
 import { Auth } from '../../services/auth';
-import { Router } from '@angular/router';
-
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   standalone: false,
@@ -10,14 +10,38 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.css'
 })
 export class Navbar {
-  @Input() userRole:'User' |'Admin' = 'User';
-   userName:string |null = '';
- constructor(private auth:Auth,private router :Router) {
-      this.userName = this.auth.getUser();
-
+ @Input() showUsername: boolean = true;
+ userName: string = '';
+ userRole: string = '';
+ showBackButton = false;
+ constructor(private router: Router, private auth: Auth) {}
+ ngOnInit(): void {
+   this.userName = this.auth.getUser() || '';
+   this.userRole = this.auth.getUserRole() || 'User';
+   this.router.events
+     .pipe(filter(event => event instanceof NavigationEnd))
+     .subscribe((event)=>{
+      const navEnd: NavigationEnd = event as NavigationEnd;  
+       this.updateBackButtonVisibility(navEnd.urlAfterRedirects);
+     });
+   this.updateBackButtonVisibility(this.router.url);
  }
-
- logout():void{
-  window.location.href ='/login';
+ private updateBackButtonVisibility(url: string): void {
+   this.showBackButton =
+     url.includes('/holdings') ||
+     (url.includes('/retail-dashboard') && this.userRole === 'ADMIN');
+ }
+ goToRetailDashboard(): void {
+  const currentUrl = this.router.url;
+  const userRole = this.auth.getUserRole();
+  if (currentUrl.includes('/retail-dashboard') && userRole === 'ADMIN') {
+   this.router.navigate(['/admin-dashboard']);
+ }else{
+  window.history.back();
+ }
+}
+ logout(): void {
+   this.auth.logout();
+   this.router.navigate(['/login']);
  }
 }

@@ -21,8 +21,7 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "typeCheckHostBindings": true,
-    "strictTemplates": true,
-    "types":["node"]
+    "strictTemplates": true
   },
   "files": [],
   "references": [

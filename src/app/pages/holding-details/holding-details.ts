@@ -53,7 +53,14 @@ export class HoldingDetails implements OnInit {
     }
   });
 }
-logout() {
+
+getTotalValue(): number {
+    return this.holdings.reduce((total, holding) => {
+      return total + (parseFloat(holding.marketValue) || 0);
+    }, 0);
+  }
+
+  logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
   }

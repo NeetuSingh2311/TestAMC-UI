@@ -17,6 +17,9 @@ login(credential: { email: string; password: string }): Observable<any> {
       sessionStorage.setItem('userName', response.name);
       sessionStorage.setItem('authUserEmail', response.email);
       sessionStorage.setItem('authPass',credential.password)
+      sessionStorage.setItem('userRole', response.role);
+      console.log('User role set in sessionStorage:', response.role);
+      console.log('Login successful:', response);
     })
   );
 }
@@ -24,8 +27,9 @@ login(credential: { email: string; password: string }): Observable<any> {
   signup(data: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/signup`, data);
   }
-
-  // Get the logged-in user's email (or name if available)
+  getUserRole(): string | null {
+    return sessionStorage.getItem('userRole'); 
+   }
   getUser() {
     return sessionStorage.getItem('userName');
   }

@@ -7,9 +7,4 @@ import { Component } from '@angular/core';
   styleUrl: './home.css'
 })
 export class Home {
-showSignup= false;
-
-openSignup() {
-  this.showSignup = true;
-}
 }

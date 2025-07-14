@@ -1,26 +1,30 @@
- <mat-toolbar class ="primary">
-    <span>TestAMC Portal</span>
-  </mat-toolbar>
 <div class="login-container">
-  <h2>Login</h2>
-
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Email<span style="color: brown;"></span></mat-label>
-      <input matInput placeholder="Email" formControlName="email" required>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Password<span style="color: brown;"></span></mat-label>
-      <input matInput placeholder="Password" type="password" formControlName="password" required>
-    </mat-form-field>
-
-    <div class="button-row">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
-      <button mat-stroked-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+  <div class="login-form">
+    <div class="form-header">
+      <h1>Welcome Back</h1>
+      <p>Log in to access your portfolio</p>
     </div>
 
-  </form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email Address</mat-label>
+        <input matInput placeholder="Enter your email" formControlName="email" required>
+      </mat-form-field>
 
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Enter your password" type="password" formControlName="password" required>
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
+        <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+
+    <p class="signup-link">
+      Don't have an account?
+      <a href="#" routerLink="/signup">Create one here</a>
+    </p>
+  </div>
 </div>
