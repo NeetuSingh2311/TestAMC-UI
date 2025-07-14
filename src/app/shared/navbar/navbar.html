@@ -1,7 +1,5 @@
-<!-- navbar.html -->
 <nav class="navbar">
 <mat-toolbar color="primary" class="header-toolbar">
-<!-- Back button (conditionally shown) -->
 <button
      mat-icon-button
      *ngIf="showBackButton"
@@ -11,10 +9,8 @@
 </button>
 <span class="toolbar-title">AMC Portfolio Dashboard</span>
 <span class="spacer"></span>
-<!-- Show username (conditionally) -->
 <mat-icon aria-label="User account" *ngIf="showUsername">account_circle</mat-icon>
 <span class="user-name" *ngIf="showUsername">{{ userName }}</span>
-<!-- Logout button -->
 <button mat-icon-button (click)="logout()" *ngIf="showUsername">
 <mat-icon>logout</mat-icon>
 </button>
