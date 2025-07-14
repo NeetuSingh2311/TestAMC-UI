@@ -1,4 +1,13 @@
 <div class="login-container">
+  <div class="notification-banner" 
+       [ngClass]="{'success': bannerType === 'success', 'error': bannerType === 'error', 'show': showBanner}"
+       *ngIf="showBanner">
+    <div class="banner-content">
+      <mat-icon>{{ bannerType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+      <span>{{ bannerMessage }}</span>
+    </div>
+  </div>
+
   <div class="login-form">
     <div class="form-header">
       <h1>Welcome Back</h1>
@@ -17,7 +26,7 @@
       </mat-form-field>
 
       <div class="button-row">
-        <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
+        <button mat-raised-button class="my-neutral-button" type="submit" [disabled]="!loginForm.valid">Login</button>
         <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
       </div>
     </form>

@@ -1,25 +1,206 @@
+
 .navbar {
  width: 100%;
+ position: sticky;
+ top: 0;
+ z-index: 1000;
+ box-shadow: 0 4px 16px rgba(0, 120, 212, 0.15);
 }
+
+
 .header-toolbar {
+ background: linear-gradient(135deg, #0078d4 0%, #106ebe 50%, #2b88d8 100%) !important;
  display: flex;
  align-items: center;
- padding: 0 16px;
+ padding: 0 24px;
+ height: 72px;
+ position: relative;
+ overflow: hidden;
 }
+
+.header-toolbar::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: linear-gradient(45deg, 
+   rgba(255,255,255,0.05) 25%, 
+   transparent 25%, 
+   transparent 75%, 
+   rgba(255,255,255,0.05) 75%);
+ background-size: 20px 20px;
+ opacity: 0.3;
+ pointer-events: none;
+}
+
+.logo-container {
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ position: relative;
+ z-index: 1;
+}
+
+.app-logo {
+ height: 48px;
+ width: 48px;
+ object-fit: cover;
+ background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+ padding: 6px;
+ border-radius: 50%;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+ border: 2px solid rgba(255, 255, 255, 0.3);
+ transition: all 0.3s ease;
+}
+
+.app-logo:hover {
+ transform: scale(1.05);
+ box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
 .toolbar-title {
- font-size: 20px;
- font-weight: 500;
+ font-size: 24px;
+ font-weight: 700;
  color: white;
+ white-space: nowrap;
+ letter-spacing: -0.3px;
+ text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ position: relative;
+ z-index: 1;
 }
+
 .spacer {
  flex: 1 1 auto;
 }
+
 .user-name {
- margin: 0 10px;
- font-weight: 500;
+ margin: 0 16px 0 12px;
+ font-weight: 600;
  color: white;
+ font-size: 16px;
+ text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+ position: relative;
+ z-index: 1;
 }
-.back-button {
+
+.back-button,
+button[mat-icon-button] {
  margin-right: 8px;
+ color: white !important;
+ background: transparent;
+ border-radius: 50%;
+ transition: all 0.3s ease;
+ position: relative;
+ z-index: 1;
+}
+
+.back-button:hover,
+button[mat-icon-button]:hover {
+ background: transparent;
+ transform: none;
+ box-shadow: none;
+}
+
+
+.back-button {
+ background: transparent !important;
+}
+
+.back-button:hover {
+ background: transparent !important;
+ transform: none !important;
+ box-shadow: none !important;
+}
+
+mat-icon {
  color: white;
+ text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+mat-icon[aria-label="User account"] {
+ font-size: 28px !important;
+ width: 28px !important;
+ height: 28px !important;
+ margin-right: 4px;
+}
+
+@media (max-width: 1024px) {
+ .header-toolbar {
+   padding: 0 16px;
+   height: 64px;
+ }
+ 
+ .app-logo {
+   height: 40px;
+   width: 40px;
+ }
+ 
+ .toolbar-title {
+   font-size: 20px;
+ }
+}
+
+@media (max-width: 768px) {
+ .header-toolbar {
+   padding: 0 12px;
+   height: 56px;
+ }
+ 
+ .app-logo {
+   height: 36px;
+   width: 36px;
+   padding: 4px;
+ }
+ 
+ .toolbar-title {
+   font-size: 16px;
+   display: none;
+ 
+ .logo-container {
+   gap: 8px;
+ }
+ 
+ .user-name {
+   font-size: 14px;
+   margin: 0 8px 0 6px;
+ }
+}
+
+@media (max-width: 480px) {
+ .header-toolbar {
+   padding: 0 8px;
+ }
+ 
+ .toolbar-title {
+   display: none;
+ }
+ 
+ .app-logo {
+   height: 32px;
+   width: 32px;
+   padding: 3px;
+ }
+ 
+ .user-name {
+   display: none; 
+ }
+ 
+ mat-icon[aria-label="User account"] {
+   font-size: 24px !important;
+   width: 24px !important;
+   height: 24px !important;
+ }
+}
+
+.navbar * {
+ transition: all 0.2s ease;
+}
+
+.back-button:focus,
+button[mat-icon-button]:focus {
+ outline: 2px solid rgba(255, 255, 255, 0.5);
+ outline-offset: 2px;
+}
 }

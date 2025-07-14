@@ -1,48 +1,123 @@
 <app-navbar></app-navbar>
-<div class = "admin-dashboard">
-<h2>Admin Dashboard</h2>
+<div class="admin-dashboard">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">
+        <mat-icon class="dashboard-icon">admin_panel_settings</mat-icon>
+        Admin Dashboard
+      </h1>
+      <p class="dashboard-subtitle">Manage users and monitor portfolio activities</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-card">
+        <mat-icon>people</mat-icon>
+        <div class="stat-info">
+          <span class="stat-number">{{ dataSource.data.length }}</span>
+          <span class="stat-label">Total Users</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<mat-form-field appearance="outline" class="admin-search-field">
-  <mat-icon matPrefix>search</mat-icon>
-  <input matInput [formControl]="searchControl" placeholder="Enter search text..." />
-</mat-form-field>
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="custom-search-field">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input 
+        type="text" 
+        [formControl]="searchControl" 
+        placeholder="Search by name, email, or PAN..." 
+        class="search-input">
+    </div>
+  </div>
 
-<div class="table-wrapper">
-<table mat-table [dataSource] = "dataSource" class = "mat-elevation-z8 full-width-table">
-    <ng-container matColumnDef = "userId">
-        <th mat-header-cell *matHeaderCellDef>UserID</th>
-        <td mat-cell *matCellDef = "let user">{{user.userId}}</td>
-    </ng-container>
-    <ng-container matColumnDef = "fullName">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef = "let user">{{user.fullName}}</td>
-    </ng-container>
-    <ng-container matColumnDef = "email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef = "let user">{{user.email}}</td>
-    </ng-container>
-     <ng-container matColumnDef = "pan">
-        <th mat-header-cell *matHeaderCellDef>Pan</th>
-        <td mat-cell *matCellDef = "let user">{{user.pan}}</td>
-    </ng-container>
-    <ng-container matColumnDef = "contactNumber">
-        <th mat-header-cell *matHeaderCellDef>ContactNumber</th>
-        <td mat-cell *matCellDef = "let user">{{user.contactNumber}}</td>
-    </ng-container>
-    <ng-container matColumnDef = "address">
-        <th mat-header-cell *matHeaderCellDef>Address</th>
-        <td mat-cell *matCellDef = "let user">{{user.address}}</td>
-    </ng-container>
+  <!-- Users Table Section -->
+  <div class="table-section">
+    <div class="table-header">
+      <h3>Registered Users</h3>
+      <span class="table-count">{{ dataSource.data.length }} users found</span>
+    </div>
+    
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width-table">
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon class="header-icon">person</mat-icon>
+            Full Name
+          </th>
+          <td mat-cell *matCellDef="let user" class="name-cell">
+            <div class="user-info">
+              <div class="user-avatar">{{ user.fullName?.charAt(0)?.toUpperCase() }}</div>
+              <span>{{ user.fullName }}</span>
+            </div>
+          </td>
+        </ng-container>
 
-     <ng-container matColumnDef = "actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef = "let user">
-            <button mat-button color="primary" (click)="viewUserPortfolio(user)">View Portfolio</button>
-        </td>
-    </ng-container> 
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon class="header-icon">email</mat-icon>
+            Email
+          </th>
+          <td mat-cell *matCellDef="let user" class="email-cell">{{ user.email }}</td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
- <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLstButtons></mat-paginator>
+        <ng-container matColumnDef="pan">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon class="header-icon">credit_card</mat-icon>
+            PAN
+          </th>
+          <td mat-cell *matCellDef="let user" class="pan-cell">{{ user.pan }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="contactNumber">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon class="header-icon">phone</mat-icon>
+            Contact
+          </th>
+          <td mat-cell *matCellDef="let user">{{ user.contactNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon class="header-icon">location_on</mat-icon>
+            Address
+          </th>
+          <td mat-cell *matCellDef="let user" class="address-cell">
+            <span [title]="user.address">{{ user.address | slice:0:30 }}{{ user.address?.length > 30 ? '...' : '' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon class="header-icon">settings</mat-icon>
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-raised-button color="primary" class="action-button" (click)="viewUserPortfolio(user)">
+              <mat-icon>visibility</mat-icon>
+              View Portfolio
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+      </table>
+      
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="dataSource.data.length === 0">
+        <mat-icon>search_off</mat-icon>
+        <h3>No users found</h3>
+        <p>Try adjusting your search criteria</p>
+      </div>
+    </div>
+    
+    <mat-paginator 
+      [pageSizeOptions]="[5, 10, 20, 50]" 
+      [pageSize]="10"
+      showFirstLastButtons
+      class="table-paginator">
+    </mat-paginator>
+  </div>
 </div>

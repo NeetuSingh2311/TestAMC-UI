@@ -233,3 +233,8 @@
     width: 100%;
   }
 }
+
+.my-neutral-button {
+  background: #0078d4 !important;
+  color: white !important;
+}
