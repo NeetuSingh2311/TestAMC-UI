@@ -238,3 +238,17 @@
   background: #0078d4 !important;
   color: white !important;
 }
+
+.notification-banner.error .banner-content mat-icon {
+  color: #602828;
+}
+
+@media (max-width: 480px) {
+  .notification-banner {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+  }
+}

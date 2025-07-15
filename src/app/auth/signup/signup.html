@@ -1,4 +1,13 @@
 <div class="signup-container">
+  <div class="notification-banner" 
+       [ngClass]="{'success': bannerType === 'success', 'error': bannerType === 'error', 'show': showBanner}"
+       *ngIf="showBanner">
+    <div class="banner-content">
+      <mat-icon>{{ bannerType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+      <span>{{ bannerMessage }}</span>
+    </div>
+  </div>
+
   <div class="signup-form">
     <button mat-icon-button class="close-btn" type="button" (click)="onCancel()">
       <mat-icon>close</mat-icon>

@@ -12,6 +12,10 @@ import { Router } from "@angular/router";
 export class Signup {
 @Output() close = new EventEmitter<void>();
   signupForm: FormGroup;
+  showBanner = false;
+  bannerMessage = '';
+  bannerType: 'success' | 'error' = 'success';
+  
   constructor(private fb: FormBuilder, private auth: Auth, private router:Router) {
     this.signupForm = this.fb.group({
       fullName: ['', Validators.required], 
@@ -27,10 +31,21 @@ export class Signup {
       console.info('Form is invalid');
       return;
     }
-    this.auth.signup(this.signupForm.value).subscribe(() => {
+    this.auth.signup(this.signupForm.value).subscribe(() => {  
+      this.showNotificationBanner('Signup successful! Please login.', 'success');
+      this.signupForm.reset(); 
       this.close.emit();
       this.router.navigate(['/login']);
     });
+  }
+   showNotificationBanner(message: string, type: 'success' | 'error') {
+    this.bannerMessage = message;
+    this.bannerType = type;
+    this.showBanner = true;
+    
+    setTimeout(() => {
+      this.showBanner = false;
+    }, 3000);
   }
  onLogin(event: Event): void {
   event.preventDefault();    

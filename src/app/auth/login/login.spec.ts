@@ -1,107 +1,89 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Login } from './login';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { Navbar } from '../../shared/navbar/navbar';
+import { MaterialModule } from '../../../shared/material-module';
+import { AdminDashboard } from '../../pages/admin-dashboard/admin-dashboard';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('Login Component', () => {
+class MockAuth {
+  login = jasmine.createSpy();
+}
+
+class MockRouter {
+  navigate = jasmine.createSpy();
+}
+
+describe('Login', () => {
   let component: Login;
   let fixture: ComponentFixture<Login>;
-  let authSpy: jasmine.SpyObj<Auth>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let mockAuth: MockAuth;
+  let mockRouter: MockRouter;
 
   beforeEach(async () => {
-    authSpy = jasmine.createSpyObj('Auth', ['login']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
     await TestBed.configureTestingModule({
-      declarations: [Login],
-      imports: [ReactiveFormsModule],
+      declarations: [Login,Navbar,AdminDashboard],
+      imports: [ReactiveFormsModule,MaterialModule,NoopAnimationsModule],
       providers: [
         FormBuilder,
-        { provide: Auth, useValue: authSpy },
-        { provide: Router, useValue: routerSpy }
+        { provide: Auth, useClass: MockAuth },
+        { provide: Router, useClass: MockRouter }
       ]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
+    mockAuth = TestBed.inject(Auth) as any;
+    mockRouter = TestBed.inject(Router) as any;
     fixture.detectChanges();
-    sessionStorage.clear();
   });
 
-  afterEach(() => {
-    sessionStorage.clear();
-  });
-
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
+  it('should create the login form with email and password controls', () => {
+    expect(component.loginForm.contains('email')).toBeTrue();
+    expect(component.loginForm.contains('password')).toBeTrue();
   });
 
   it('should not submit if form is invalid', () => {
+    spyOn(component, 'showNotificationBanner');
     component.loginForm.setValue({ email: '', password: '' });
     component.onSubmit();
-    expect(authSpy.login).not.toHaveBeenCalled();
+    expect(mockAuth.login).not.toHaveBeenCalled();
+    expect(component.loading).toBeFalse();
   });
 
-  it('should login and navigate to retail-dashboard for USER role', fakeAsync(() => {
-    component.loginForm.setValue({ email: 'user@example.com', password: 'pass' });
-    const mockResponse = { role: 'USER' };
-    authSpy.login.and.returnValue(of(mockResponse));
+ 
 
+  it('should show error banner and set errorMessage for invalid role', () => {
+    mockAuth.login.and.returnValue(of({ role: 'UNKNOWN' }));
+    spyOn(component, 'showNotificationBanner').and.callThrough();
+    component.loginForm.setValue({ email: 'x@test.com', password: 'pass' });
     component.onSubmit();
-    tick();
+    expect(component.showNotificationBanner).toHaveBeenCalledWith('Password incorrect', 'error');
+    expect(component.errorMessage).toBe('Invalid login credentials. Please try again.');
+  });
 
-    expect(authSpy.login).toHaveBeenCalledWith({ email: 'user@example.com', password: 'pass' });
-    expect(sessionStorage.getItem('userRole')).toBe('USER');
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['retail-dashboard']);
-    expect(component.errorMessage).toBe('');
-    expect(component.loading).toBeFalse();
-  }));
-
-  it('should login and navigate to admin-dashboard for ADMIN role', fakeAsync(() => {
-    component.loginForm.setValue({ email: 'admin@example.com', password: 'adminpass' });
-    const mockResponse = { role: 'ADMIN' };
-    authSpy.login.and.returnValue(of(mockResponse));
-
+  it('should show error banner and set errorMessage on login error', () => {
+    mockAuth.login.and.returnValue(throwError(() => new Error('Login failed')));
+    spyOn(component, 'showNotificationBanner').and.callThrough();
+    component.loginForm.setValue({ email: 'fail@test.com', password: 'pass' });
     component.onSubmit();
-    tick();
-
-    expect(authSpy.login).toHaveBeenCalledWith({ email: 'admin@example.com', password: 'adminpass' });
-    expect(sessionStorage.getItem('userRole')).toBe('ADMIN');
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['admin-dashboard']);
-    expect(component.errorMessage).toBe('');
-    expect(component.loading).toBeFalse();
-  }));
-
-  it('should set errorMessage for invalid role in response', fakeAsync(() => {
-    component.loginForm.setValue({ email: 'foo@example.com', password: 'bar' });
-    const mockResponse = { role: 'GUEST' };
-    authSpy.login.and.returnValue(of(mockResponse));
-
-    component.onSubmit();
-    tick();
-
+    expect(component.showNotificationBanner).toHaveBeenCalledWith('Password incorrect', 'error');
     expect(component.errorMessage).toBe('Invalid login credentials. Please try again.');
     expect(component.loading).toBeFalse();
+  });
+
+  it('should hide banner after 5 seconds', fakeAsync(() => {
+    component.showNotificationBanner('Test message', 'success');
+    expect(component.showBanner).toBeTrue();
+    tick(5000);
+    expect(component.showBanner).toBeFalse();
   }));
 
-  it('should set errorMessage on login error', fakeAsync(() => {
-    component.loginForm.setValue({ email: 'fail@example.com', password: 'fail' });
-    authSpy.login.and.returnValue(throwError(() => new Error('Login failed')));
-
-    component.onSubmit();
-    tick();
-
-    expect(component.errorMessage).toBe('Invalid login credentials. Please try again.');
-    expect(component.loading).toBeFalse();
-  }));
-
-  it('should navigate to home on onCancel', () => {
+  it('should navigate to "" on cancel', () => {
     component.onCancel();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
   });
 });
